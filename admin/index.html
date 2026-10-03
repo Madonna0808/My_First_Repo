@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="admin.css" rel="stylesheet">
+    <title>Admin Dashboard</title>
+</head>
+
+<body>
+
+    <!-- Login screen -->
+    <section id="login-view" class="login-view">
+        <form id="login-form" class="login-card">
+            <div class="brand brand-lg"><i class="fa-solid fa-robot"></i><span>Agent Admin</span></div>
+            <h1>Sign in</h1>
+            <p class="muted">Use <code>admin</code> / <code>admin123</code> for the demo.</p>
+            <label>Username
+                <input type="text" id="login-user" autocomplete="username" required>
+            </label>
+            <label>Password
+                <input type="password" id="login-pass" autocomplete="current-password" required>
+            </label>
+            <p id="login-error" class="error" hidden>Invalid username or password.</p>
+            <button type="submit" class="btn btn-primary btn-block">Sign in</button>
+        </form>
+    </section>
+
+    <!-- App shell -->
+    <div id="app-view" class="app" hidden>
+        <aside class="sidebar" id="sidebar">
+            <div class="brand"><i class="fa-solid fa-robot"></i><span>Agent Admin</span></div>
+            <nav>
+                <ul>
+                    <li><a href="#dashboard" data-view="dashboard"><i class="fa-solid fa-gauge"></i>Dashboard</a></li>
+                    <li><a href="#agents" data-view="agents"><i class="fa-solid fa-user-tie"></i>Agents</a></li>
+                    <li><a href="#bookings" data-view="bookings"><i class="fa-solid fa-calendar-check"></i>Bookings</a></li>
+                    <li><a href="#transactions" data-view="transactions"><i class="fa-solid fa-money-bill-transfer"></i>Transactions</a></li>
+                    <li><a href="#users" data-view="users"><i class="fa-solid fa-users"></i>Users</a></li>
+                    <li><a href="#settings" data-view="settings"><i class="fa-solid fa-gear"></i>Settings</a></li>
+                </ul>
+            </nav>
+            <button class="btn btn-ghost logout" id="logout-btn"><i class="fa-solid fa-right-from-bracket"></i>Log out</button>
+        </aside>
+
+        <div class="main">
+            <header class="topbar">
+                <button class="icon-btn menu-toggle" id="menu-toggle" aria-label="Toggle menu"><i class="fa-solid fa-bars"></i></button>
+                <h2 id="page-title">Dashboard</h2>
+                <div class="topbar-right">
+                    <div class="search">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="search" id="global-search" placeholder="Search…">
+                    </div>
+                    <button class="icon-btn" id="theme-toggle" aria-label="Toggle theme"><i class="fa-solid fa-moon"></i></button>
+                    <div class="avatar" title="Admin">A</div>
+                </div>
+            </header>
+
+            <main class="content">
+                <!-- Dashboard -->
+                <section data-page="dashboard">
+                    <div class="stats" id="stats"></div>
+                    <div class="grid-2">
+                        <div class="panel">
+                            <div class="panel-head">
+                                <h3>Revenue (last 12 months)</h3>
+                            </div>
+                            <div id="revenue-chart" class="chart"></div>
+                        </div>
+                        <div class="panel">
+                            <div class="panel-head">
+                                <h3>Bookings by status</h3>
+                            </div>
+                            <div id="status-chart" class="bars"></div>
+                        </div>
+                    </div>
+                    <div class="panel">
+                        <div class="panel-head">
+                            <h3>Recent bookings</h3>
+                            <a href="#bookings" class="link">View all</a>
+                        </div>
+                        <div class="table-wrap">
+                            <table id="recent-table"></table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Generic table pages -->
+                <section data-page="agents" hidden>
+                    <div class="panel">
+                        <div class="panel-head">
+                            <h3>Agents</h3>
+                            <button class="btn btn-primary" data-add="agents"><i class="fa-solid fa-plus"></i>Add agent</button>
+                        </div>
+                        <div class="table-wrap">
+                            <table id="agents-table"></table>
+                        </div>
+                    </div>
+                </section>
+
+                <section data-page="bookings" hidden>
+                    <div class="panel">
+                        <div class="panel-head">
+                            <h3>Bookings</h3>
+                            <select id="booking-filter">
+                                <option value="">All statuses</option>
+                                <option>Confirmed</option>
+                                <option>Pending</option>
+                                <option>Cancelled</option>
+                            </select>
+                        </div>
+                        <div class="table-wrap">
+                            <table id="bookings-table"></table>
+                        </div>
+                    </div>
+                </section>
+
+                <section data-page="transactions" hidden>
+                    <div class="panel">
+                        <div class="panel-head">
+                            <h3>Transactions</h3>
+                            <button class="btn btn-ghost" id="export-csv"><i class="fa-solid fa-download"></i>Export CSV</button>
+                        </div>
+                        <div class="table-wrap">
+                            <table id="transactions-table"></table>
+                        </div>
+                    </div>
+                </section>
+
+                <section data-page="users" hidden>
+                    <div class="panel">
+                        <div class="panel-head">
+                            <h3>Users</h3>
+                            <button class="btn btn-primary" data-add="users"><i class="fa-solid fa-plus"></i>Add user</button>
+                        </div>
+                        <div class="table-wrap">
+                            <table id="users-table"></table>
+                        </div>
+                    </div>
+                </section>
+
+                <section data-page="settings" hidden>
+                    <form class="panel settings" id="settings-form">
+                        <div class="panel-head">
+                            <h3>Settings</h3>
+                        </div>
+                        <label>Site name <input type="text" name="siteName"></label>
+                        <label>Support email <input type="email" name="supportEmail"></label>
+                        <label>Default commission (%) <input type="number" name="commission" min="0" max="100" step="0.5"></label>
+                        <label>Currency
+                            <select name="currency">
+                                <option>USD</option>
+                                <option>EUR</option>
+                                <option>GBP</option>
+                                <option>MYR</option>
+                            </select>
+                        </label>
+                        <label class="check"><input type="checkbox" name="notifications"> Email notifications for new bookings</label>
+                        <div>
+                            <button type="submit" class="btn btn-primary">Save changes</button>
+                            <span id="settings-saved" class="muted" hidden>Saved.</span>
+                        </div>
+                    </form>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <!-- Add / edit modal -->
+    <dialog id="modal">
+        <form method="dialog" id="modal-form">
+            <h3 id="modal-title">Add</h3>
+            <div id="modal-fields"></div>
+            <div class="modal-actions">
+                <button value="cancel" class="btn btn-ghost" formnovalidate>Cancel</button>
+                <button value="save" class="btn btn-primary">Save</button>
+            </div>
+        </form>
+    </dialog>
+
+    <script src="admin.js"></script>
+</body>
+
+</html>
